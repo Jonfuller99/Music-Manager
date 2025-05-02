@@ -10,8 +10,10 @@
 </template>
 
 <script>
+import AddSongs from './AddSongs.vue';
     export default{
         props: ['theme'],
+        components:{AddSongs},
         methods:{
             closeModal(){
                 this.$emit('close')
@@ -27,7 +29,7 @@
         width: 400px;
         padding: 20px;
         margin: 100px auto;
-        background: white;
+        background: rgb(0, 0, 0);
         border-radius: 10px;
         display: flex;
         align-items: center;
@@ -44,7 +46,7 @@
         height: 100%;
     }
     p {
-        color: black;
+        color: white;
     }
 
     .modal h2 {
