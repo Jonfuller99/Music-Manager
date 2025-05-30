@@ -105,3 +105,17 @@ a,
     margin: 0 auto;
   }
 }
+
+.btn-add {
+  background-color: hsla(160, 100%, 37%, 0.15);
+  color: hsla(160, 100%, 37%, 1);
+}
+
+.btn-add:hover {
+  background-color: hsla(160, 100%, 37%, 0.2);
+  color: white;
+}
+
+.btn-add::after {
+  background: radial-gradient(circle, hsla(160, 100%, 37%, 0.3) 1%, transparent 1%) center/15000%;
+}

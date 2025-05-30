@@ -20,7 +20,7 @@
           v-model="artist"
         >
 
-        <label for="" class="form-label">Genre:</label>
+        <label for="genre" class="form-label">Genre:</label>
         <div class="select-group">
             <select name="genres" id="genres" class="form-select" v-model="genre">
                 <option value="" disabled selected>Select a genre...</option>
@@ -30,6 +30,9 @@
                 <option value="RnB">RnB</option>
             </select>
             <span class="select-arrow">▼</span>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-add">Add</button>
         </div>
       </div>
     </form>
@@ -110,6 +113,10 @@
   .select-group {
   position: relative;
   margin-bottom: 1.5rem;
+}
+
+.btn-group{
+  text-align: center;
 }
 
 .form-select {

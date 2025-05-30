@@ -1,33 +1,35 @@
 <template>
   <main>
-    <div class="divcol">
-    <h1>{{ title }}</h1>
-    <div v-if="showTracksModal">
-      <Modal theme="" @close="toggleAddTracks">
-        <template v-slot:links>
-          <a href="#">see artist</a>
-          <a href="#">more info</a>
-        </template>
-        <h2>Add Tracks</h2>
-        <p>A place to store your tracks</p>
-        <AddSongs></AddSongs>
+    <div>
+      <div class="divcol" v-if="showButtons">
+        <h1>{{ title }}</h1>
+        <button i @click="toggleAddTracks" class="btn">Add Tracks</button>
+        <button @click="toggleViewSamples" class="btn">View Samples</button>
+      </div>
+      <div v-if="showTracksModal">
+        <Modal theme="" @close="toggleAddTracks">
+          <template v-slot:links>
+            <a href="#">see artist</a>
+            <a href="#">more info</a>
+          </template>
+          <h2>Add Tracks</h2>
+          <p>A place to store your tracks</p>
+          <AddSongs></AddSongs>
 
-      </Modal>
-    </div>
+        </Modal>
+      </div>
 
-    <div v-if="showSampleModal">
-      <Modal @close="toggleViewSamples">
-        <template v-slot:links>
-          <a href="#">previous</a>
-          <a href="#">next</a>
-        </template>
-        <h2>Samples</h2>
-        <p>A list of your samples</p>
-      </Modal>
+      <div v-if="showSampleModal">
+        <Modal @close="toggleViewSamples">
+          <template v-slot:links>
+            <a href="#">previous</a>
+            <a href="#">next</a>
+          </template>
+          <h2>Samples</h2>
+          <p>A list of your samples</p>
+        </Modal>
+      </div>
     </div>
-    <button @click="toggleAddTracks" class="btn">Add Tracks</button>
-    <button @click="toggleViewSamples" class="btn">View Samples</button>
-  </div>
   </main>
 </template>
 
@@ -44,6 +46,7 @@ import Modal from '@/components/Modal.vue'
         title: 'Music Manager',
         showTracksModal: false,
         showSampleModal: false,
+        showButtons: true,
       }
     },
     methods:{
@@ -55,11 +58,14 @@ import Modal from '@/components/Modal.vue'
       toggleAddTracks(){
         this.showTracksModal = !this.showTracksModal;
         this.showSampleModal = false;
+        this.showButtons = !this.showButtons;
 
       },
       toggleViewSamples(){
         this.showSampleModal = !this.showSampleModal;
         this.showTracksModal = false;
+        this.showButtons = !this.showButtons;
+
 
       },
     }
