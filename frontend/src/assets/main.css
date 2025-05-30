@@ -14,6 +14,18 @@ a,
   transition: 0.4s;
   padding: 3px;
 }
+  .divcol {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 10px;
+}
+.divrow{
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  padding: 10px;
+}
 
 .btn {
   /* Base styles matching your theme */
@@ -119,3 +131,73 @@ a,
 .btn-add::after {
   background: radial-gradient(circle, hsla(160, 100%, 37%, 0.3) 1%, transparent 1%) center/15000%;
 }
+
+.panel{
+    margin: 30px 10px;
+    background: var(--color-background-soft);
+    text-align: left;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
+}
+
+.item {
+  /* Base Box Style */
+  background: var(--color-background-mute);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  /* Content Layout */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  /* Hover Effects */
+  &:hover {
+    border-color: var(--color-border-hover);
+    background-color: var(--color-border-hover);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Title Style */
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-heading);
+    margin: 0;
+  }
+
+  /* Subtitle/Metadata */
+  &__meta {
+    font-size: 0.9rem;
+    color: var(--color-text-soft);
+    display: flex;
+    gap: 1rem;
+  }
+
+  /* Optional Action Bar */
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--color-border);
+  }
+}
+
+    .backdrop{
+        top: 0;
+        left: 0;
+        position: fixed;
+        background: rgba(181, 176, 176, 0.5);
+        width: 100%;
+        height: 100%;
+        z-index: 99999;
+    }

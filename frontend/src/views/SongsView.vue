@@ -1,33 +1,15 @@
 <template>
-  <div class="about">
-
-    <!-- <div @click="changeMessage">
-      <h1>{{message}}</h1>
-    </div>
-    <h1> {{age}}</h1>
-    <button @click="age++">Increase age</button>
-    <button @click="age--">Decrease age</button>  -->
-
+  <div class="songs">
     <div>
-      <h1>All your songs:</h1>
-      <ul>
-        <li v-for="song in songs">
-          <h3>{{ song.title }} - {{ song.artists.join(', ') }}</h3>
-          <h4>Genre: {{ song.genre }}</h4>
-          <h4>Beat: {{ song.beat }}</h4>
-        </li>
-      </ul>
+      <h1>Your Songs:</h1>
+      <ViewSongs></ViewSongs>
     </div>
-    <div>
-      <a :href="url">click me pls</a>
-    </div>
-
   </div>
 </template>
 
 <style>
 @media (min-width: 1024px) {
-  .about {
+  .songs {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -37,6 +19,7 @@
 <script setup>
   import { ref, onMounted } from 'vue'
   import { fetchSongs, fetchData } from '@/api.js'
+  import ViewSongs from '@/components/ViewSongs.vue'
 
   const message = ref('Loading...')
   const age = ref('Loading...')

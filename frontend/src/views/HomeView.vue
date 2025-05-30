@@ -74,11 +74,6 @@ import Modal from '@/components/Modal.vue'
 
 
 <style>
-  .divcol {
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  padding: 10px;
-}
+
 
 </style>

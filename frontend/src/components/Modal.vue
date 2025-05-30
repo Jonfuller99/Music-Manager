@@ -37,15 +37,6 @@ import AddSongs from './AddSongs.vue';
         justify-content: center;
     }
 
-    .backdrop{
-        top: 0;
-        left: 0;
-        position: fixed;
-        background: rgba(181, 176, 176, 0.5);
-        width: 100%;
-        height: 100%;
-        z-index: 99999;
-    }
     p {
         color: white;
     }
