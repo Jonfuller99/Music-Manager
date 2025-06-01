@@ -1,9 +1,21 @@
-from fastapi  import FastAPI
+from fastapi  import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
-from .models.models import Song
+from sqlmodel import Annotated, Session
+from db import engine, get_session, Song, SQLModel
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    SQLModel.metadata.create_all(engine)
+    yield
+    print("Shutting down...")
+
+app = FastAPI(lifespan=lifespan)
+
+
+SessionDep = Annotated[Session, Depends(get_session)]
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,12 +36,11 @@ async def read_root():
         "url": "http://localhost:8000/api/hello" 
     }
 
-@app.get("/songs", response_model=List[Song])
-async def get_songs():
-    return [
-        Song(title="Never Cared", artists=["Mr.J", "Cdug" ], genre="Hip Hop", beat="SnakesAndRakes.mp3"), #TODO add genres as as table in DB
-        Song(title="Fantastic4", artists=["Mr.J", "Big Tasty", "JPXFRD", "Cdug" ], genre="Hip Hop", beat="Magic.mp3") 
-    ]
+
+
+@app.get("/songs/")
+def get_songs(session: SessionDep):
+    return session.query(Song).all()
 
 @app.get("/api/hello")
 async def read_root():

@@ -7,7 +7,7 @@ services:
     volumes:
       - ./backend:/code
     environment:
-      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgresql://postgres:password@db:5432/musicdb
 
   frontend:
     image: node:18
@@ -17,3 +17,18 @@ services:
     ports:
       - "5173:5173"
     command: sh -c "npm install && npm run dev -- --host"
+
+  db:
+    image: postgres:15
+    restart: always
+    ports:
+      - "5432:5432"  
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: musicdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  
+volumes:
+  pgdata:
