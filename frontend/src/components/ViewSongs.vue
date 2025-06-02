@@ -6,9 +6,7 @@
       </div>
     </div>
 
-    <SongInfo v-if="displayInfo" :song="songSelect">
-
-    </SongInfo>
+    <SongInfo v-if="displayInfo" :song="songSelect"/>
   </div>
 </template>
 

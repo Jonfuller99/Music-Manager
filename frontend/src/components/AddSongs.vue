@@ -1,5 +1,5 @@
 <template>
-    <form class="auth-form">
+    <form class="auth-form" @submit="submitSong">
       <div class="form-group">
         <label for="title" class="form-label">Title:</label>
         <input 
@@ -32,13 +32,14 @@
             <span class="select-arrow">▼</span>
         </div>
         <div class="btn-group">
-          <button class="btn btn-add">Add</button>
+          <button type="submit" class="btn btn-add">Add</button>
         </div>
       </div>
     </form>
   </template>
   
   <script>
+  import { postSong } from "@/api.js";
   export default {
     data(){
         return{
@@ -46,6 +47,29 @@
             artist: '',
             genre: '',
         }
+    },
+    methods:{
+      async submitSong(event){
+        event.preventDefault();
+        try{
+          const newSong = {
+            title: this.title,
+            artist: this.artist,
+            genre: this.genre,
+            bpm: 120,
+            file_path: 'temp/file/path.mp3'
+          }
+          const result = await postSong(newSong);
+          console.log("Song added successfully", result)
+
+          this.title = '';
+          this.artist = '';
+          this.genre = '';
+        
+        } catch (error){
+          console.error("Failed to add song:", error)
+        }
+      }
     }
   }
   </script>

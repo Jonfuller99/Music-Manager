@@ -11,15 +11,15 @@
     <div class="song-details">
       <div class="detail-row">
         <span class="detail-label">Artists:</span>
-        <span class="detail-value">{{ song.artists.join(', ') || 'Unknown' }}</span>
+        <span class="detail-value">{{ song.artist || 'Unknown' }}</span>
       </div>
       <div class="detail-row">
-        <span class="detail-label">Beat:</span>
-        <span class="detail-value">{{ song.beat || 'N/A' }}</span>
+        <span class="detail-label">BPM:</span>
+        <span class="detail-value">{{ song.bpm || 'N/A' }}</span>
       </div>
-      <div class="detail-row" v-if="song.duration">
-        <span class="detail-label">Duration:</span>
-        <span class="detail-value">{{ song.duration }}</span>
+      <div class="detail-row" v-if="song.file_path">
+        <span class="detail-label">File path:</span>
+        <span class="detail-value">{{ song.file_path }}</span>
       </div>
     </div>
   </div>

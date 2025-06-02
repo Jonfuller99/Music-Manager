@@ -2,6 +2,6 @@ fastapi
 uvicorn[standard]
 psycopg2-binary
 sqlalchemy
-sqlmodel
+sqlmodel>=0.0.16
 pydantic
 python-dotenv
