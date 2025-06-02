@@ -19,6 +19,16 @@
           placeholder="Enter artist..."
           v-model="artist"
         >
+        
+        <label for="Bpm" class="form-label">BPM:</label>
+        <input 
+          id="bpm" 
+          class="form-input" 
+          type="number" 
+          required
+          placeholder="Enter bpm..."
+          v-model="bpm"
+        >
 
         <label for="genre" class="form-label">Genre:</label>
         <div class="select-group">
@@ -31,6 +41,14 @@
             </select>
             <span class="select-arrow">▼</span>
         </div>
+
+
+        <label for="file" class="form-label">File:</label>
+        <div class="file-input-container">
+          <input type="file" id="file" accept=".mp3,.wav" @change="handleFileChange">
+          <label for="file" >{{ fileName || 'No file selected' }}</label>
+        </div>
+
         <div class="btn-group">
           <button type="submit" class="btn btn-add">Add</button>
         </div>
@@ -45,7 +63,9 @@
         return{
             title: '',
             artist: '',
+            bpm:'',
             genre: '',
+            fileName: ''
         }
     },
     methods:{
@@ -55,8 +75,8 @@
           const newSong = {
             title: this.title,
             artist: this.artist,
+            bpm: this.bpm,
             genre: this.genre,
-            bpm: 120,
             file_path: 'temp/file/path.mp3'
           }
           const result = await postSong(newSong);
@@ -64,11 +84,16 @@
 
           this.title = '';
           this.artist = '';
+          this.bpm = '';
           this.genre = '';
+          this.fileName = '';
         
         } catch (error){
           console.error("Failed to add song:", error)
         }
+      },
+      handleFileChange(event){
+        this.fileName = event.target.files[0] ? event.target.files[0].name : '';
       }
     }
   }
@@ -215,4 +240,69 @@
       color: var(--vt-c-text-dark-2);
     }
   }
-  </style>
+
+.file-input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+  input[type="file"] {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+/* Custom File Input Styling */
+input[type="file"] + label {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  gap: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+}
+
+/* Hover State */
+input[type="file"] + label:hover {
+  border-color: var(--color-border-hover);
+  background-color: hsla(160, 100%, 37%, 0.1);
+  color: hsla(160, 100%, 37%, 1);
+}
+
+/* Focus State */
+input[type="file"]:focus + label {
+  outline: 2px solid hsla(160, 100%, 37%, 0.4);
+  outline-offset: 2px;
+}
+
+/* Active State */
+input[type="file"]:active + label {
+  transform: translateY(1px);
+  background-color: hsla(160, 100%, 37%, 0.2);
+}
+
+/* Icon (optional) */
+input[type="file"] + label::before {
+  content: "📁";
+  font-size: 1.1em;
+}
+
+</style>

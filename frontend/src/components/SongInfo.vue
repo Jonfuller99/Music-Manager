@@ -21,6 +21,10 @@
         <span class="detail-label">File path:</span>
         <span class="detail-value">{{ song.file_path }}</span>
       </div>
+      <div class="detail-row">
+        <span class="detail-label">Uploaded at</span>
+        <span class="detail-value">{{ formatDate(song.uploaded_at)}}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -31,7 +35,20 @@
             type: Object,
             required: true,
         }
+
     })
+
+    const formatDate = (dateString)=>{
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      })
+    };
 
 </script>
 
@@ -56,6 +73,10 @@
   padding-bottom: 12px;
   border-bottom: 1px solid #333;
 }
+.song-info-header > div:last-child {
+  min-width: 0;
+  flex: 1;
+}
 
 .info-icon {
   font-size: 1.5em;
@@ -73,6 +94,9 @@
   font-size: 1.1em;
   font-weight: 600;
   color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .info-subtitle {

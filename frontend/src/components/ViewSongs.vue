@@ -30,8 +30,6 @@
         songSelect.value = song;
         displayInfo.value = true;
     }
-    
-
   }
 
   onMounted(async () =>{
