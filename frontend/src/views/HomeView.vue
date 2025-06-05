@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div>
+    <!-- <div>
       <div class="divcol" v-if="showButtons">
         <h1>{{ title }}</h1>
         <button i @click="toggleAddTracks" class="btn">Add Tracks</button>
@@ -29,18 +29,24 @@
           <p>A list of your samples</p>
         </Modal>
       </div>
-    </div>
+    </div> -->
+
+      <ViewSongs/>
+
+
+
   </main>
 </template>
 
 <script>
 import AddSongs from '@/components/AddSongs.vue'
 import Modal from '@/components/Modal.vue'
+import ViewSongs from '@/components/ViewSongs.vue'
 
   export default{
     
     name:'Home',
-    components: {Modal, AddSongs, },
+    components: {Modal, AddSongs, ViewSongs },
     data(){
       return {
         title: 'Music Manager',

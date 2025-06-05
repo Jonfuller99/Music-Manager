@@ -1,5 +1,5 @@
 <template>
-  <div class="panel song-info">
+  <div class="panel sidebar song-info">
     <div class="song-info-header">
       <div class="info-icon">🎵</div>
       <div>
@@ -35,7 +35,6 @@
             type: Object,
             required: true,
         }
-
     })
 
     const formatDate = (dateString)=>{

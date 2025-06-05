@@ -1,13 +1,11 @@
 <template>
-  <div class="divcol">
-    <div class="main-nav">
-      <router-link to="/" class="nav-link">Home</router-link>
-      <router-link to="/songs" class="nav-link">Songs</router-link>
-    </div>
-    <div class="content-wrapper">
-      <router-view/>
-    </div>
-  </div> 
+  <div class="main-nav">
+    <router-link to="/" class="nav-link">Home</router-link>
+    <router-link to="/songs" class="nav-link">Songs</router-link>
+  </div>
+  <div class="content-wrapper">
+    <router-view/>
+  </div>
 </template>
 
 
@@ -19,21 +17,6 @@
 
 
 <style scoped>
-h1 { 
-  border-bottom: 1px solid #ddd;
-  display: inline-block;
-  padding-bottom: 10px;
-  margin: 10px;
-}
-.divcol {
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  padding: 10px;
-}
-div{
-  margin: 10px;
-}
 
 .main-nav {
   position: fixed;
@@ -50,9 +33,8 @@ div{
 }
 
 .content-wrapper {
-  margin-top: 60px; 
-  padding: 20px;
-  flex: 1;
+  margin: 80px 0px;
+  min-width: 100vw;
 }
 
 /* Router Links */
