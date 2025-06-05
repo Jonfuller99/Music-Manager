@@ -1,7 +1,8 @@
 <template>
   <div class="main-nav">
-    <router-link to="/" class="nav-link">Home</router-link>
-    <router-link to="/songs" class="nav-link">Songs</router-link>
+    <router-link to="/" class="nav-main-pos nav-link">Home</router-link>
+    <router-link to="/songs" class="nav-main-pos nav-link">Songs</router-link>
+    <router-link to="/profile" class="profile nav-link ">Profile</router-link>
   </div>
   <div class="content-wrapper">
     <router-view/>
@@ -32,19 +33,34 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+.profile{
+  position: fixed;
+  top: 1;
+  right: 0;
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-right: 2rem;
+  transition: all 0.4s ease;
+}
+
 .content-wrapper {
   margin: 80px 0px;
   min-width: 100vw;
 }
 
 /* Router Links */
+.nav-main-pos{
+  position: relative;
+}
+
 .nav-link {
   text-decoration: none;
   color: var(--color-text);
   font-weight: 500;
   font-size: 0.95rem;
   padding: 0.5rem 0;
-  position: relative;
   transition: all 0.4s ease;
 }
 

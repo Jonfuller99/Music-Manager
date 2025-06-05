@@ -1,6 +1,6 @@
 <template>
     <div class="container main">
-      <div class="" >
+      <div>
         <ViewSongs @song-selected="handleSongSelection"/>
       </div>
       <div class="container panel temp">
@@ -24,7 +24,7 @@
   
 </template>
 
-<style scoped>
+<style>
   .center-text{
     text-align: center;
     justify-content: center;
