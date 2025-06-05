@@ -1,31 +1,19 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  min-width: 100vw;
+
   font-weight: normal;
 }
 
-a,
+
 .green {
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
   padding: 3px;
 }
-  .divcol {
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  padding: 10px;
-}
-.divrow{
-  display: flex;
-  flex-direction: row;
-  margin: auto;
-  padding: 10px;
-}
+
 
 .btn {
   /* Base styles matching your theme */
@@ -112,7 +100,6 @@ a,
   }
 
   #app {
-    padding: 0 2rem;
     max-width: 1280px;
     margin: 0 auto;
   }
@@ -133,10 +120,10 @@ a,
 }
 
 .panel{
-    margin: 30px 10px;
+    margin: 10px;
     background: var(--color-background-soft);
     text-align: left;
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 12px;
     border: 1px solid var(--color-border);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -157,6 +144,9 @@ a,
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   /* Hover Effects */
   &:hover {
@@ -172,6 +162,7 @@ a,
     font-weight: 500;
     color: var(--color-heading);
     margin: 0;
+
   }
 
   /* Subtitle/Metadata */
@@ -201,3 +192,25 @@ a,
         height: 100%;
         z-index: 99999;
     }
+
+
+.sidebar {
+    width: 400px;
+    height: 98%; 
+}
+
+
+.large-panel{
+    width: 300px;
+    height: 90vh;        
+}
+
+.fancy-panel{
+    background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+  border: 1px solid #404040;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
