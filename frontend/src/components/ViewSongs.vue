@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <div class="panel large-panel fancy-panel">
       <div v-for="song in songs" :key="song.title">
         <span class="item item__title" @click="showSongInfo(song)">{{ song.title }}</span>
