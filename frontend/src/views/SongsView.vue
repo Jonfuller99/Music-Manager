@@ -10,7 +10,7 @@
         <SongInfo v-if="selectedSong" :song="selectedSong"/>
         <div v-if="selectedSong" class="container-h temp">
           <div class="panel fancy-panel">
-            <PlayerView :audioSrc="songPath"/>
+            <PlayerView :key="songPath" :audioSrc="songPath"/>
  
           </div>
           <div class="panel fancy-panel temp">
