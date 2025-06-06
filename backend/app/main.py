@@ -1,5 +1,6 @@
-from fastapi  import FastAPI, Depends, HTTPException # type: ignore
-from fastapi.middleware.cors import CORSMiddleware # type: ignore
+from fastapi  import FastAPI, Depends, HTTPException, UploadFile, File 
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select
 from typing import Annotated
 from db.database import engine, get_session
@@ -16,6 +17,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
@@ -31,13 +34,31 @@ def get_song(song_id: int, session: SessionDep) -> Song:
         raise HTTPException(status_code=404, detail="Song not found")
     return song
 
-@app.post("/add-song/")
-def create_song(song: Song, session: SessionDep) -> Song:
-    session.add(song)
+@app.delete("/remove-song/{song_id}")
+async def delete_song(song_id: int, session: SessionDep) -> dict:
+    song = session.get(Song, song_id)
+    if not song:
+        raise HTTPException(status_code=404, detail="Song not found")
+    session.delete(song)
     session.commit()
-    session.refresh(song)
-    return song
 
+    return{"message": f"Song '{song.title}' deleted successfully"}
+
+
+@app.post("/add-song/")
+async def create_song(song: Song, session: SessionDep ) -> Song:
+        session.add(song)
+        session.commit()
+        session.refresh(song)
+        return song
+
+@app.post("/upload-file/")
+async def upload_file(uploaded_file: UploadFile = File()):
+    file_location = f"uploads/{uploaded_file.filename}"
+    with open(file_location, "wb+") as file_object:
+        file_object.write(uploaded_file.file.read())   
+    
+    return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'"}
 
 
 
