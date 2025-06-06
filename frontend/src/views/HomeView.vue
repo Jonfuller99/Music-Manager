@@ -31,7 +31,27 @@
       </div>
     </div> -->
 
-      <ViewSongs/>
+    <div class="container-h panel">
+      <div class="container temp" >
+        <div class="box-1 panel fancy-panel">
+
+        </div>
+        <div class="panel fancy-panel temp">
+
+        </div>
+      </div>
+      <div class="container temp"> 
+        <div class="panel fancy-panel temp">
+          
+        </div>
+        <div class="box-1 panel fancy-panel">
+
+        </div>
+      </div>
+
+    </div>
+
+      
 
 
 
@@ -80,6 +100,11 @@ import ViewSongs from '@/components/ViewSongs.vue'
 
 
 <style>
+.box-1{
+  width: 600px;
+  height: 550px;
+}
+
 
 
 </style>

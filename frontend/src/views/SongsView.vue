@@ -11,6 +11,7 @@
         <div v-if="selectedSong" class="container-h temp">
           <div class="panel fancy-panel">
             <PlayerView :audioSrc="songPath"/>
+ 
           </div>
           <div class="panel fancy-panel temp">
             lyrics
@@ -32,24 +33,9 @@
     font-style: italic;
   }
 
-  .container{
-    display:flex;
-  }
-  .container-h{
-    display: flex;
-    flex-direction: column;
-  }
 
-  .main{
-    width: 100vw;
-    padding-left: .5%;
-    padding-right: 1%;
 
-  }
-  
-  .temp{
-    flex-grow: 1;
-  }
+
 
   @media (min-width: 1024px) {
     .songs {
@@ -61,15 +47,12 @@
 </style>
 <script setup>
   import { ref, onMounted } from 'vue'
-  import { fetchSongs, fetchData } from '@/api.js'
+  import { fetchSongs } from '@/api.js'
   import ViewSongs from '@/components/ViewSongs.vue'
   import SongInfo from '@/components/SongInfo.vue'
-import PlayerView from '@/components/PlayerView.vue'
+  import PlayerView from '@/components/PlayerView.vue'
 
-  const message = ref('Loading...')
-  const age = ref('Loading...')
   const songs = ref([])
-  const url = ref('Loading...')
   const selectedSong = ref(null)
   const songPath = ref()
 
@@ -80,11 +63,6 @@ import PlayerView from '@/components/PlayerView.vue'
   
 
   onMounted(async () => {    
-    const data = await fetchData()
-    message.value = data.message
-    age.value = data.age
-    url.value = data.url
-
     songs.value = await fetchSongs()
   }) 
 </script>

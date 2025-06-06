@@ -19,7 +19,7 @@
           placeholder="Enter artist..."
           v-model="artist"
         >
-        
+
         <label for="Bpm" class="form-label">BPM:</label>
         <input 
           id="bpm" 
@@ -57,7 +57,7 @@
   </template>
   
   <script>
-  import { postSong } from "@/api.js";
+  import { postSong, uploadFile } from "@/api.js";
   export default {
     data(){
         return{
@@ -65,6 +65,7 @@
             artist: '',
             bpm:'',
             genre: '',
+            file: '',
             fileName: ''
         }
     },
@@ -77,10 +78,17 @@
             artist: this.artist,
             bpm: this.bpm,
             genre: this.genre,
-            file_path: 'temp/file/path.mp3'
+            file_path: `http://localhost:8000/uploads/${this.fileName}`
           }
-          const result = await postSong(newSong);
-          console.log("Song added successfully", result)
+  
+          const [result, upload] = await Promise.all([
+            postSong(newSong),
+            uploadFile(this.file)
+          ]);
+          
+          console.log("Song added successfully", result)        
+          console.log("File uploaded successfully", upload)
+
 
           this.title = '';
           this.artist = '';
@@ -94,6 +102,7 @@
       },
       handleFileChange(event){
         this.fileName = event.target.files[0] ? event.target.files[0].name : '';
+        this.file = event.target.files[0];
       }
     }
   }
