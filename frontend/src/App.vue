@@ -1,6 +1,6 @@
 <template>
-  <div class="main-nav">
-    <router-link to="/" class="nav-main-pos nav-link">Home</router-link>
+  <div class="main-nav" v-if="isLoggedIn">
+    <router-link to="/home" class="nav-main-pos nav-link">Home</router-link>
     <router-link to="/songs" class="nav-main-pos nav-link">Songs</router-link>
     <router-link to="/profile" class="profile nav-link ">Profile</router-link>
   </div>
@@ -13,7 +13,13 @@
 <script>
   export default{
     name: 'App',
+    data(){
+      return{
+        isLoggedIn: false
+      }
+    }
   }
+  
 </script>
 
 

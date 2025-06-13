@@ -39,3 +39,54 @@ export async function uploadFile(uploadedFile){
     return await resp.json()
 }
 
+
+export async function registerUser(userData){
+    const resp = await fetch(`${API_BASE}/register/`, {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    if (!resp.ok) throw new Error('Failed to register user', userData)
+    return await resp.json()
+}
+
+export async function loginUser(username, password){
+    const formData = new FormData();
+
+    formData.append('username', username);
+    formData.append('password', password);
+    const resp = await fetch(`${API_BASE}/token/`, {
+        method: 'POST',
+        body: formData
+    });
+    if (!resp.ok) throw new Error('Failed to login user', formData)
+
+    const data = await resp.json()
+    localStorage.setItem('access_token', data.access_token)
+    return data
+}
+
+export async function getCurrentUser() {
+    const token = localStorage.getItem('access_token')
+    if (!token) throw new Error('No token found')
+    
+    const resp = await fetch(`${API_BASE}/users/me`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    
+    if (!resp.ok) {
+        if (resp.status === 401) {
+            // Token expired or invalid
+            localStorage.removeItem('access_token')
+            throw new Error('Please login again')
+        }
+        throw new Error('Failed to get user info')
+    }
+    
+    return await resp.json()
+}
+

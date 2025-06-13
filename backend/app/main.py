@@ -1,16 +1,20 @@
-from fastapi  import FastAPI, Depends, HTTPException, UploadFile, File 
+from fastapi  import FastAPI, Depends, HTTPException, UploadFile, File, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 from typing import Annotated
 from db.database import engine, get_session
-from db.models import Song
+from db.models import Song, User, CreateUser
 from sqlmodel import SQLModel
 from contextlib import asynccontextmanager
+from passlib.context import CryptContext
+
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     yield
     print("Shutting down...")
@@ -21,6 +25,85 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 
 SessionDep = Annotated[Session, Depends(get_session)]
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def fake_hash_password(password: str):
+    return "fakehashed" + password
+
+def get_user(session: SessionDep, username: str):
+    statement = select(User).where(User.username == username)
+    user = session.exec(statement).first()
+    return user
+    
+def fake_decode_token(token: str, session: SessionDep):
+    print(f"Decoding token: {token}")
+    user = get_user(session, token)
+    return user
+
+
+async def get_current_user(session: SessionDep, token: Annotated[str, Depends(oauth2_scheme)]):
+    user = fake_decode_token(token, session)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return user
+
+async def get_current_active_user(
+        current_user: Annotated[User, Depends(get_current_user)],
+):
+    if current_user.disabled:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
+@app.post("/token/")
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: SessionDep):
+    user = get_user(session, form_data.username)
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect username")
+    hashed_password = fake_hash_password(form_data.password)
+    if not hashed_password == user.hashed_password:
+        raise HTTPException(status_code=400, detail="Incorrect password")
+    return {"access_token": user.username, "token_type": "bearer"}
+
+
+
+@app.get("/users/me")
+async def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "artist_name": current_user.artist_name,
+        "created_at": current_user.created_at
+    }
+
+@app.post("/register/")
+async def register_user(user_data: CreateUser, session: SessionDep):
+    existing_user = session.exec(
+        select(User).where(User.username == user_data.username)
+    ).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="User already exists")
+    hashed_password = fake_hash_password(user_data.password)
+    user = User(
+        username=user_data.username,
+        artist_name=user_data.artist_name,
+        hashed_password=hashed_password
+    )
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+
+
+
+    
 
 
 @app.get("/songs/")

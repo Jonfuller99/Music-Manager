@@ -15,5 +15,11 @@ class User(SQLModel, table=True):
     id: int = Field(default=None, primary_key= True)
     username: str = Field(index=True)
     artist_name: str = Field(index=True) 
-    password: str
+    hashed_password: str
+    disabled: bool | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CreateUser(SQLModel):
+    username: str
+    artist_name: str
+    password: str

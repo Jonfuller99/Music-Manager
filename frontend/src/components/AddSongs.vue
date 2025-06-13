@@ -108,7 +108,7 @@
   }
   </script>
   
-  <style scoped>
+  <style>
   .auth-form {
     max-width: 420px;
     margin: 30px auto;
