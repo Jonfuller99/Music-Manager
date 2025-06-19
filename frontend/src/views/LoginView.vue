@@ -7,7 +7,7 @@
         <div v-if="toggleCreateUser">
             <Modal @close="handleCreateUser">
                 <div class="container-h center login panel fancy-panel">
-                    <CreateUser/>
+                    <CreateUser @close="handleCreateUser"/>
                 </div>
             </Modal>    
         </div>

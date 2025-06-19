@@ -48,7 +48,15 @@ export async function registerUser(userData){
         },
         body: JSON.stringify(userData)
     })
-    if (!resp.ok) throw new Error('Failed to register user', userData)
+    if (!resp.ok) {
+        const errorData = await resp.json() // Get the error details from FastAPI
+        const error = new Error('Failed to register user')
+        error.response = {
+            status: resp.status,
+            data: errorData
+        }
+        throw error
+    }
     return await resp.json()
 }
 

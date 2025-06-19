@@ -1,6 +1,6 @@
 <template>
     <div class="login-text">Sign up</div>
-<form @submit.prevent="userSignUp">
+<form @submit.prevent="handleSubmit">
     <div class="form-group">
         <label for="username" class="form-label">Username:</label>
         <input id="username" class="form-input login-form-input" type="text" v-model="username"/>
@@ -12,6 +12,9 @@
     <button type="submit" class="btn login-button">Sign up</button>
  
 </form>   
+    <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
 </template>
 
 <script setup>
@@ -21,6 +24,27 @@
     const username = ref('')
     const artistName = ref('')
     const password = ref('')
+    const errorMessage = ref('')
+
+    const emit = defineEmits(['close'])
+
+    async function handleSubmit(){
+        try{
+            errorMessage.value = ''
+            await userSignUp()
+            emit('close')
+        }catch (error){
+            if (error.response?.status === 400) {
+                errorMessage.value = error.response.data.detail || 'User already exists'
+            } else if (error.response?.status === 401) {
+                errorMessage.value = 'Incorrect username or password'
+            } else {
+                errorMessage.value = 'An error occurred. Please try again.'
+            }
+            console.error('Registration failed:', error)
+        }
+
+    }
 
     async function userSignUp(){
         const newUser = { 
@@ -61,4 +85,14 @@ a{
     width: 330px;
     height: 50px;
 }
+.error-message {
+    color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.1);
+    border: 1px solid #ff6b6b;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 </style>

@@ -22,4 +22,11 @@ class User(SQLModel, table=True):
 class CreateUser(SQLModel):
     username: str
     artist_name: str
-    password: str
+    password: str  
+
+class Token(SQLModel):
+    access_token: str
+    token_type: str
+
+class TokenData(SQLModel):
+    username: str | None = None
