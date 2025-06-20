@@ -3,10 +3,15 @@
 <form class="" action="" @submit.prevent="userLogin">
     <div class="form-group">
         <label for="username" class="form-label">Username:</label>
-        <input id="username" class="form-input login-form-input" type="username" v-model="username"></input>
+        <input required id="username" class="form-input login-form-input" type="username" v-model="username"></input>
         <label for="password" class="form-label">Password:</label>
-        <input id="password" class="form-input login-form-input" type="password" v-model="password"></input>
+        <input required id="password" class="form-input login-form-input" type="password" v-model="password"></input>
     </div>
+
+    <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+
     <div class="btn-group">
         <button type="submit" class="btn login-button">Login</button>
     </div> 
@@ -16,21 +21,24 @@
 
 <script setup>
     import { ref } from 'vue'
-    import { loginUser } from '@/api'
-    import router from '@/router'
+    import { useRouter } from 'vue-router'
+    import { useAuthStore } from '@/stores/auth'
 
     const emit = defineEmits(['showCreateUser'])
+    const authStore = useAuthStore()
+    const router = useRouter()
 
     const username = ref('')
     const password = ref('')
+    const errorMessage = ref('')
 
     async function userLogin(){
         try{
-            const loginResult = await loginUser(username.value, password.value)
-            console.log('Login successful:', loginResult)
+            await authStore.login(username.value, password.value)
             router.push('/home')
         } catch (error){
-            console.error('Login Failed', error.message)
+            console.log(error)
+            errorMessage.value = error.response?.data?.detail || 'Login failed'
         }
 
     }

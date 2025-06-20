@@ -1,7 +1,7 @@
 <template>
     <div class="container main">
-      <div class="panel large-panel" >
-        Profile
+      <div class="panel large-panel profile" >
+        <Account></Account>
       </div>
       <div class="temp panel">
         wide varaity of settings and options!
@@ -11,12 +11,12 @@
 </template>
 
 <script setup>
-    import ViewSongs from '@/components/ViewSongs.vue'
-    import SongInfo from '@/components/SongInfo.vue'
-    import PlayerView from '@/components/PlayerView.vue'        
+  import Account from '@/components/Profile/Account.vue';      
 
 </script>
 
-<style>
-
+<style scoped>
+  .profile{
+    width: 400px;
+}
 </style>

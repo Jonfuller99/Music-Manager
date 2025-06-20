@@ -1,12 +1,12 @@
 <template>
     <div class="container center">
-        <div class="container-h center login panel fancy-panel">
+        <div class="container-v center login panel fancy-panel">
             <Login @show-create-user="handleCreateUser"></Login>
     
         </div>
         <div v-if="toggleCreateUser">
             <Modal @close="handleCreateUser">
-                <div class="container-h center login panel fancy-panel">
+                <div class="container-v center login panel fancy-panel">
                     <CreateUser @close="handleCreateUser"/>
                 </div>
             </Modal>    

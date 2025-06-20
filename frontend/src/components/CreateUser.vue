@@ -3,18 +3,18 @@
 <form @submit.prevent="handleSubmit">
     <div class="form-group">
         <label for="username" class="form-label">Username:</label>
-        <input id="username" class="form-input login-form-input" type="text" v-model="username"/>
+        <input required id="username" class="form-input login-form-input" type="text" v-model="username"/>
         <label for="artist_name" class="form-label">Artist Name:</label>
-        <input id="artist_name" class="form-input login-form-input" type="text" v-model="artistName"/>
+        <input required id="artist_name" class="form-input login-form-input" type="text" v-model="artistName"/>
         <label for="password" class="form-label">Password:</label>
-        <input id="password" class="form-input login-form-input" type="password" v-model="password"/>
+        <input required id="password" class="form-input login-form-input" type="password" v-model="password"/>
+    </div>
+    <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
     </div>
     <button type="submit" class="btn login-button">Sign up</button>
  
 </form>   
-    <div v-if="errorMessage" class="error-message">
-        {{ errorMessage }}
-    </div>
 </template>
 
 <script setup>
@@ -85,14 +85,6 @@ a{
     width: 330px;
     height: 50px;
 }
-.error-message {
-    color: #ff6b6b;
-    background-color: rgba(255, 107, 107, 0.1);
-    border: 1px solid #ff6b6b;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    text-align: center;
-}
+
 
 </style>

@@ -4,11 +4,11 @@
         <ViewSongs @song-selected="handleSongSelection"/>
       </div>
       <div class="container panel temp">
-        <div v-if="!selectedSong" class="container-h center-text temp">
+        <div v-if="!selectedSong" class="container-v center-text temp">
           Select a song to play
         </div>
         <SongInfo v-if="selectedSong" :song="selectedSong"/>
-        <div v-if="selectedSong" class="container-h temp">
+        <div v-if="selectedSong" class="container-v temp">
           <div class="panel fancy-panel">
             <PlayerView :key="songPath" :audioSrc="songPath"/>
  

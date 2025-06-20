@@ -69,15 +69,20 @@ export async function loginUser(username, password){
         method: 'POST',
         body: formData
     });
-    if (!resp.ok) throw new Error('Failed to login user', formData)
-
     const data = await resp.json()
-    localStorage.setItem('access_token', data.access_token)
+    if(!resp.ok){
+        const error = new Error(data?.detail || `Failed to login: ${resp.status}`)
+        error.response = {
+            status: resp.status,
+            data: data
+        }
+        throw error
+    }
+
     return data
 }
 
-export async function getCurrentUser() {
-    const token = localStorage.getItem('access_token')
+export async function getCurrentUser(token) {
     if (!token) throw new Error('No token found')
     
     const resp = await fetch(`${API_BASE}/users/me`, {
@@ -87,12 +92,13 @@ export async function getCurrentUser() {
     })
     
     if (!resp.ok) {
-        if (resp.status === 401) {
-            // Token expired or invalid
-            localStorage.removeItem('access_token')
-            throw new Error('Please login again')
+        const errorData = await resp.json().catch(() => ({}))
+        const error = new Error('Failed to get user info')
+        error.response = {
+            status: resp.status,
+            data: errorData
         }
-        throw new Error('Failed to get user info')
+        throw error
     }
     
     return await resp.json()

@@ -31,7 +31,7 @@
       </div>
     </div> -->
 
-    <div class="container-h panel">
+    <div class="container-v panel">
       <div class="container temp" >
         <div class="box-1 panel fancy-panel">
 

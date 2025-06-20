@@ -1,5 +1,5 @@
 <template>
-  <div class="main-nav" v-if="isLoggedIn">
+  <div class="main-nav" v-if="auth.isLoggedIn">
     <router-link to="/home" class="nav-main-pos nav-link">Home</router-link>
     <router-link to="/songs" class="nav-main-pos nav-link">Songs</router-link>
     <router-link to="/profile" class="profile nav-link ">Profile</router-link>
@@ -10,16 +10,9 @@
 </template>
 
 
-<script>
-  export default{
-    name: 'App',
-    data(){
-      return{
-        isLoggedIn: false
-      }
-    }
-  }
-  
+<script setup>
+import { useAuthStore } from './stores/auth';
+  const auth = useAuthStore()
 </script>
 
 
