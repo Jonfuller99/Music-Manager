@@ -1,22 +1,22 @@
 <template>
     <div class="login-text">Login</div>
-<form class="" action="" @submit.prevent="userLogin">
-    <div class="form-group">
-        <label for="username" class="form-label">Username:</label>
-        <input required id="username" class="form-input login-form-input" type="username" v-model="username"></input>
-        <label for="password" class="form-label">Password:</label>
-        <input required id="password" class="form-input login-form-input" type="password" v-model="password"></input>
-    </div>
+    <form class="" action="" @submit.prevent="userLogin">
+        <div class="form-group">
+            <label for="username" class="form-label">Username:</label>
+            <input required id="username" class="form-input login-form-input" type="username" v-model="username"></input>
+            <label for="password" class="form-label">Password:</label>
+            <input required id="password" class="form-input login-form-input" type="password" v-model="password"></input>
+        </div>
 
-    <div v-if="errorMessage" class="error-message">
-        {{ errorMessage }}
-    </div>
+        <div v-if="errorMessage" class="error-message">
+            {{ errorMessage }}
+        </div>
 
-    <div class="btn-group">
-        <button type="submit" class="btn login-button">Login</button>
-    </div> 
-</form>   
-<p>No Account? <a @click="$emit('showCreateUser')">Sign up here</a></p>
+        <div class="btn-group">
+            <button type="submit" class="btn login-button">Login</button>
+        </div> 
+    </form>   
+    <p>No Account? <a @click="$emit('showCreateUser')">Sign up here</a></p>
 </template>
 
 <script setup>

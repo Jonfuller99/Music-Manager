@@ -34,9 +34,11 @@
     <div class="container-v panel">
       <div class="container temp" >
         <div class="box-1 panel fancy-panel">
+          <Account></Account>
 
         </div>
         <div class="panel fancy-panel temp">
+          <LinkToMP3></LinkToMP3>
 
         </div>
       </div>
@@ -51,46 +53,41 @@
     </div>
   </main>
 </template>
-
-<script>
+<script setup>
+import { ref } from 'vue'
+import Account from '@/components/Profile/Account.vue'
+import LinkToMP3 from '@/components/LinkToMP3.vue'
 import AddSongs from '@/components/AddSongs.vue'
 import Modal from '@/components/Modal.vue'
 import ViewSongs from '@/components/ViewSongs.vue'
 
-  export default{
-    
-    name:'Home',
-    components: {Modal, AddSongs, ViewSongs },
-    data(){
-      return {
-        title: 'Music Manager',
-        showTracksModal: false,
-        showSampleModal: false,
-        showButtons: true,
-      }
-    },
-    methods:{
-      handleClick(){
-        console.log(this.$refs.name)
-        this.$refs.name.classList.add('active')
-        this.$refs.name.focus()
-      },
-      toggleAddTracks(){
-        this.showTracksModal = !this.showTracksModal;
-        this.showSampleModal = false;
-        this.showButtons = !this.showButtons;
+const title = 'Music Manager'
 
-      },
-      toggleViewSamples(){
-        this.showSampleModal = !this.showSampleModal;
-        this.showTracksModal = false;
-        this.showButtons = !this.showButtons;
+const showTracksModal = ref(false)
+const showSampleModal = ref(false)
+const showButtons = ref(true)
 
+const nameRef = ref(null)
 
-      },
-    }
-  }
+function handleClick() {
+  console.log(nameRef.value)
+  nameRef.value?.classList.add('active')
+  nameRef.value?.focus()
+}
+
+function toggleAddTracks() {
+  showTracksModal.value = !showTracksModal.value
+  showSampleModal.value = false
+  showButtons.value = !showButtons.value
+}
+
+function toggleViewSamples() {
+  showSampleModal.value = !showSampleModal.value
+  showTracksModal.value = false
+  showButtons.value = !showButtons.value
+}
 </script>
+
 
 
 <style>
