@@ -1,5 +1,6 @@
-from fastapi  import FastAPI, Depends, HTTPException, UploadFile, File, status
+from fastapi  import FastAPI, Depends, HTTPException, UploadFile, File, status, Query
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import Session, select
@@ -9,11 +10,13 @@ from db.models import Song, User, CreateUser, TokenData, Token
 from sqlmodel import SQLModel
 from contextlib import asynccontextmanager
 from passlib.context import CryptContext
-import jwt
 from jwt.exceptions import InvalidTokenError
 from datetime import datetime, timedelta, timezone
-import os
 from dotenv import load_dotenv
+import yt_dlp as youtube_dl 
+import tempfile 
+import jwt
+import os
 
 
 
@@ -193,6 +196,38 @@ async def upload_file(uploaded_file: UploadFile = File()):
     
     return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'"}
 
+
+@app.get("/link-to-mp3/")
+async def link_to_mp3(url: str = Query(...)):
+    print('at backend')
+    try:
+        options={
+            'format':'bestaudio/best',
+            'keepvideo':False,
+            'quiet': False,
+            'no_warnings': False,
+            'writeinfojson': False,
+            'writethumbnail': False,
+            'writesubtitles': False,
+            'extractaudio': True,
+            'audioformat': 'mp3',
+            'audioquality': '192k', 
+        }
+        
+        with youtube_dl.YoutubeDL(options) as ydl:
+
+            info = ydl.extract_info(url, download=False)
+            audio_url = info.get('url')
+
+            return {
+                'title': info.get('title'),
+                'duration': info.get('duration'),
+                'audio_url': audio_url,
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+        
 
 
 
