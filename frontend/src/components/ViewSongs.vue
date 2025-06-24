@@ -72,6 +72,7 @@
 .controls{
   text-align: center;
   font-weight: 1000;
+  user-select: none;
 }
 
 </style>

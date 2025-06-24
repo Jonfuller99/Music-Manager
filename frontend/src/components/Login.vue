@@ -65,6 +65,8 @@
 
 a{
  color: rgb(117, 117, 182) ;   
+ user-select: none;
+ cursor:pointer;
 }
 
 .login-button{

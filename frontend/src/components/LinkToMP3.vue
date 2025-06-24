@@ -8,9 +8,9 @@
         </div>
         <div class="container title padding">
             
-            <div class="panel button" v-on:click="downloadMp3">Download <font-awesome-icon icon="download"/> </div>
+            <div class="panel button btn" v-on:click="downloadMp3">Download <font-awesome-icon icon="download"/> </div>
             <div class="panel button btn-add convert" v-on:click="handleConvert">Convert <font-awesome-icon icon="rotate-right" /></div>
-            <div class="panel button" v-on:click="handleNext">Next <font-awesome-icon icon="arrow-right"/></div>
+            <div class="panel button btn" v-on:click="handleNext">Next <font-awesome-icon icon="arrow-right"/></div>
         </div>
         <div class=" temp">
             <div class="table-container">
@@ -111,12 +111,14 @@ async function handleNext(){
     align-items: center;
     justify-content: center;
     font-size: medium;
+    user-select: none;
+    gap: .5rem;
 }
 .convert{
     font-size: large;
     font-weight: bold;
-
     background-color: var(login-form-input);
+    user-select: none;
 
 }
 .green{
