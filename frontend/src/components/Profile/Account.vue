@@ -8,6 +8,7 @@
         <div class="panel ">
             <div><span class="info white">Username:</span>  {{ authStore.userName }}</div>
             <div><span class="info white">Account age:</span> {{ formatDate(authStore.user.created_at) }}</div>
+            <div><span class="info white">Permission:</span> {{ authStore.userRole }}</div>
         </div>    
     </div>
     

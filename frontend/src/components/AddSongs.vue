@@ -58,6 +58,7 @@
   
   <script>
   import { postSong, uploadFile } from "@/api.js";
+  import { useAuthStore } from "@/stores/auth";
   export default {
     data(){
         return{
@@ -73,6 +74,9 @@
       async submitSong(event){
         event.preventDefault();
         try{
+          const authStore = useAuthStore()
+          const token = authStore.token
+
           const newSong = {
             title: this.title,
             artist: this.artist,
@@ -82,8 +86,8 @@
           }
   
           const [result, upload] = await Promise.all([
-            postSong(newSong),
-            uploadFile(this.file)
+            postSong(newSong, token),
+            uploadFile(this.file, token)
           ]);
           
           console.log("Song added successfully", result)        

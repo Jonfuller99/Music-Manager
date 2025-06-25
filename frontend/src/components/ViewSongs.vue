@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="panel large-panel">
-      <div class="container">
+      <div v-if="authStore.isAdmin" class="container">
         <div class="item panel temp fancy-panel controls" @click="deleteSong">-</div>
         <div class="item panel temp fancy-panel controls" @click="toggleAddTracks">+</div>
       </div>
@@ -22,12 +22,16 @@
 
 
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, useAttrs } from 'vue'
   import { fetchSongs, removeSong} from '@/api.js'
   import Modal from './Modal.vue'
   import AddSongs from './AddSongs.vue'
+  import { useAuthStore } from '@/stores/auth'
+
+
 
   const emit = defineEmits(['song-selected'])
+  const authStore = useAuthStore()
 
   const songs = ref([])
   const songSelect = ref(null)
@@ -49,6 +53,9 @@
 
   function toggleAddTracks(){
     showTracksModal.value = !showTracksModal.value;
+    if (showTracksModal.value === False){
+      refreshSongs()
+    }
   }
 
   async function refreshSongs(){

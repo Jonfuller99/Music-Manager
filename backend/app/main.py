@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 from typing import Annotated
 from db.database import engine, get_session
-from db.models import Song, User, CreateUser, TokenData, Token
+from db.models import Song, User, CreateUser, TokenData, Token, UserRole
 from sqlmodel import SQLModel
 from contextlib import asynccontextmanager
 from passlib.context import CryptContext
@@ -24,13 +24,11 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
-print(SECRET_KEY)
-print(ALGORITHM)
-print(ACCESS_TOKEN_EXPIRE_MINUTES)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    SQLModel.metadata.drop_all(engine)
+    # SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     yield
     print("Shutting down...")
@@ -42,7 +40,6 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -53,23 +50,34 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password: str):
     return pwd_context.hash(password)
 
+
 def get_user(session: SessionDep, username: str):
     statement = select(User).where(User.username == username)
     user = session.exec(statement).first()
     return user
     
-def fake_decode_token(token: str, session: SessionDep):
+def decode_token(token: str, session: SessionDep):
     print(f"Decoding token: {token}")
     user = get_user(session, token)
     return user
 
 def authenticate_user(session: SessionDep, username: str, password: str):
     user = get_user(session, username)
+    
     if not user:
-        return False
+        return {
+            'user': False,
+            "msg": f"No account found with username: '{username}'"
+        }            
     if not verify_password(password, user.hashed_password):
-        return False
-    return user 
+        return {
+            'user': False,
+            'msg': 'Incorrect password'
+        }
+    return {
+        'user': user,
+        'msg': ''
+    }
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
@@ -102,25 +110,30 @@ async def get_current_user(session: SessionDep, token: Annotated[str, Depends(oa
         raise credentials_exception
     return user
 
-async def get_current_active_user(
-        current_user: Annotated[User, Depends(get_current_user)],
-):
+async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
+def require_admin(current_user: Annotated[User, Depends(get_current_active_user)]):
+    print(f"[DEBUG] User: {current_user.username}, Role: {current_user.role} ({type(current_user.role)})")
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=400, detail='Requires admin access')
+    return current_user
+
+
 @app.post("/token/")
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: SessionDep) -> Token:
     user = authenticate_user(session, form_data.username, form_data.password)
-    if not user:
+    if not user['user']:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail=user['msg'],
             headers={"WWW-Authenticate": "Bearer"},
             )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user['user'].username}, expires_delta=access_token_expires
     )
 
     return Token(access_token=access_token, token_type="bearer")
@@ -133,6 +146,7 @@ async def read_users_me(current_user: Annotated[User, Depends(get_current_active
         "id": current_user.id,
         "username": current_user.username,
         "artist_name": current_user.artist_name,
+        "role": current_user.role,
         "created_at": current_user.created_at
     }
 
@@ -170,8 +184,8 @@ def get_song(song_id: int, session: SessionDep) -> Song:
         raise HTTPException(status_code=404, detail="Song not found")
     return song
 
-@app.delete("/remove-song/{song_id}")
-async def delete_song(song_id: int, session: SessionDep) -> dict:
+@app.delete("/remove-song/{song_id}") #requires admin
+async def delete_song(song_id: int, session: SessionDep, admin_user: Annotated[User, Depends(require_admin)]) -> dict:
     song = session.get(Song, song_id)
     if not song:
         raise HTTPException(status_code=404, detail="Song not found")
@@ -181,15 +195,15 @@ async def delete_song(song_id: int, session: SessionDep) -> dict:
     return{"message": f"Song '{song.title}' deleted successfully"}
 
 
-@app.post("/add-song/")
-async def create_song(song: Song, session: SessionDep ) -> Song:
+@app.post("/add-song/") #requires admin
+async def create_song(song: Song, session: SessionDep, admin_user: Annotated[User, Depends(require_admin)] ) -> Song:
         session.add(song)
         session.commit()
         session.refresh(song)
         return song
 
 @app.post("/upload-file/")
-async def upload_file(uploaded_file: UploadFile = File()):
+async def upload_file(admin_user: Annotated[User, Depends(require_admin)], uploaded_file: UploadFile = File()):
     file_location = f"uploads/{uploaded_file.filename}"
     with open(file_location, "wb+") as file_object:
         file_object.write(uploaded_file.file.read())   

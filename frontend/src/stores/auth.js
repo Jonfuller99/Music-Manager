@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { loginUser, getCurrentUser } from '@/api'
+import router from '@/router'
 
 export const useAuthStore = defineStore('auth', () => {
   const isLoggedIn = ref(false)
@@ -9,6 +10,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(()=>!!token.value)
   const userName = computed(()=> user.value?.username|| '')
+  const userRole = computed(()=> user.value?.role || 'user')
+  const isAdmin = computed(()=> user.value?.role  === 'admin')
+  const isUser = computed(()=> user.value?.role  === 'user')
 
   async function login(username, password){
     try{
@@ -29,6 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoggedIn.value = false
     user.value = null
     token.value = null
+    router.push('/')
   }
 
   async function fetchCurrentuser(){
@@ -44,15 +49,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
   }
+
+  function requireAdmin(){
+    if (!isAdmin){
+      throw new Error('Admin access required')
+    }
+  }
+
   return {
     isLoggedIn,
     user,
     token,
     isAuthenticated,
     userName,
+    userRole,
+    isAdmin,
+    isUser,
     login,
     logout,
-    fetchCurrentuser
+    fetchCurrentuser,
+    requireAdmin,
   }
 }, {
   persist:{

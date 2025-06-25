@@ -4,7 +4,7 @@
         <Account></Account>
       </div>
       <div class="temp panel">
-        wide varaity of settings and options!
+        <div class="btn" v-on:click="authStore.logout">Logout</div>
       </div>
     </div>
 
@@ -12,6 +12,10 @@
 
 <script setup>
   import Account from '@/components/Profile/Account.vue';      
+  import { useAuthStore } from '@/stores/auth';
+
+  const authStore = useAuthStore()
+
 
 </script>
 

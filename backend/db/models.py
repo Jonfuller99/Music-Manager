@@ -1,5 +1,6 @@
 from sqlmodel import Field, SQLModel
 from datetime import datetime, timezone
+from enum import Enum
 
 class Song(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key = True)
@@ -10,6 +11,10 @@ class Song(SQLModel, table=True):
     file_path: str = Field(index=True)
     uploaded_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class UserRole(str, Enum):
+    ADMIN = 'admin'
+    USER = 'user'
+
 
 class User(SQLModel, table=True):
     id: int = Field(default=None, primary_key= True)
@@ -17,6 +22,7 @@ class User(SQLModel, table=True):
     artist_name: str = Field(index=True) 
     hashed_password: str
     disabled: bool | None = None
+    role: UserRole = Field(default=UserRole.USER)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class CreateUser(SQLModel):
