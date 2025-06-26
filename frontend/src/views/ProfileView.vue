@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-  import Account from '@/components/Profile/Account.vue';      
+  import Account from '@/components/Account.vue';      
   import { useAuthStore } from '@/stores/auth';
 
   const authStore = useAuthStore()

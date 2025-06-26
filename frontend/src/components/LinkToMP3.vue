@@ -12,7 +12,7 @@
             <div class="panel button btn-add convert" v-on:click="handleConvert">Convert <font-awesome-icon icon="rotate-right" /></div>
             <div class="panel button btn" v-on:click="handleNext">Next <font-awesome-icon icon="arrow-right"/></div>
         </div>
-        <div class=" temp">
+        <div class="temp">
             <div class="table-container">
                 <table class="styled-table">
                 <thead>
@@ -126,23 +126,12 @@ async function handleNext(){
     font-style: italic;
 }
 
-.container-fill{
-    height: 100%;
-    width: 100%;
-}
+
 .padding{
     padding-bottom: 10px;
 }
 
-.title{
-    text-align: center;
-    justify-content: center;
-    font-size: 25px;
-    color: white;
-    font-weight: bold;
-    font-weight: bold;
-    font-weight: bold;
-}
+
 .input {
   width: 100%;
   padding: 0.75rem 1rem;

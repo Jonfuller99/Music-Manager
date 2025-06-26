@@ -44,6 +44,7 @@
       </div>
       <div class="container temp"> 
         <div class="panel fancy-panel temp">
+          <YourSongs></YourSongs>
           
         </div>
         <div class="box-1 panel fancy-panel">
@@ -55,11 +56,14 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import Account from '@/components/Profile/Account.vue'
+import Account from '@/components/Account.vue'
 import LinkToMP3 from '@/components/LinkToMP3.vue'
+
 import AddSongs from '@/components/AddSongs.vue'
 import Modal from '@/components/Modal.vue'
 import ViewSongs from '@/components/ViewSongs.vue'
+import YourSongs from '@/components/YourSongs.vue'
+
 
 const title = 'Music Manager'
 

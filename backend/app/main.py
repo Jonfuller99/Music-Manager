@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 from typing import Annotated
 from db.database import engine, get_session
-from db.models import Song, User, CreateUser, TokenData, Token, UserRole
+from db.models import Artist, Song, User, CreateUser, TokenData, Token, UserRole
 from sqlmodel import SQLModel
 from contextlib import asynccontextmanager
 from passlib.context import CryptContext
@@ -28,7 +28,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # SQLModel.metadata.drop_all(engine)
+    SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     yield
     print("Shutting down...")
@@ -142,10 +142,15 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], sess
 
 @app.get("/users/me")
 async def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
+    if current_user.artist is None:
+        artist_name = current_user.username
+    else:
+        artist_name = current_user.artist.name
+    
     return {
-        "id": current_user.id,
+        "id": current_user.user_id,
         "username": current_user.username,
-        "artist_name": current_user.artist_name,
+        "artist_name": artist_name,
         "role": current_user.role,
         "created_at": current_user.created_at
     }
@@ -158,14 +163,21 @@ async def register_user(user_data: CreateUser, session: SessionDep):
     if existing_user:
         raise HTTPException(status_code=400, detail="User already exists")
     hashed_password = get_password_hash(user_data.password)
+
+    artist = session.get(Artist,  user_data.artist_id)
     user = User(
         username=user_data.username,
-        artist_name=user_data.artist_name,
         hashed_password=hashed_password
     )
     session.add(user)
     session.commit()
     session.refresh(user)
+
+    if artist is not None:
+        artist.user_id = user.user_id
+        session.add(artist)
+        session.commit()
+
     return user
 
 
@@ -176,6 +188,10 @@ async def register_user(user_data: CreateUser, session: SessionDep):
 @app.get("/songs/")
 def get_songs(session: SessionDep):
     return session.exec(select(Song)).all()
+
+@app.get("/artists/")
+def get_artists(session: SessionDep):
+    return session.exec(select(Artist)).all()
 
 @app.get("/songs/{song_id}")
 def get_song(song_id: int, session: SessionDep) -> Song:

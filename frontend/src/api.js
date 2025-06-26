@@ -14,6 +14,12 @@ export async function fetchSongs(){
     return await resp.json()
 }
 
+export async function fetchArtists(){
+    const resp = await fetch(`${API_BASE}/artists/`)
+    if (!resp.ok) throw new Error('Failed to fetch artists')
+    return await resp.json()
+}
+
 export async function convertToMp3(url){
     const resp = await fetch(`${API_BASE}/link-to-mp3/?url=${encodeURIComponent(url)}`);
     if (!resp.ok) throw new Error('Failed to get audio info');

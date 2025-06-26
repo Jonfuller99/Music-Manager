@@ -37,6 +37,7 @@
   const songSelect = ref(null)
   const displayInfo = ref(false)
   const showTracksModal = ref(false)
+  const token = authStore.token
 
   function showSongInfo(song){
     emit('song-selected', song)
@@ -63,7 +64,7 @@
   }
 
   async function deleteSong(){
-    await removeSong(songSelect.value.id)    
+    await removeSong(songSelect.value.id, token)    
     refreshSongs()
     showSongInfo(null)
   }

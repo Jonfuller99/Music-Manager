@@ -5,7 +5,11 @@
         <label for="username" class="form-label">Username:</label>
         <input required id="username" class="form-input login-form-input" type="text" v-model="username"/>
         <label for="artist_name" class="form-label">Artist Name:</label>
-        <input required id="artist_name" class="form-input login-form-input" type="text" v-model="artistName"/>
+        <select id="artist" class="form-input login-form-input" v-model="artistId">
+        <option v-for="artist in availableArtists" :key="artist.artist_id" :value="artist.artist_id">
+            {{ artist.name }}
+        </option>
+        </select>
         <label for="password" class="form-label">Password:</label>
         <input required id="password" class="form-input login-form-input" type="password" v-model="password"/>
     </div>
@@ -18,11 +22,13 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    import { registerUser } from '@/api'
+    import { ref, onMounted, computed } from 'vue'
+    import { fetchArtists, registerUser } from '@/api'
 
     const username = ref('')
+    const artists = ref([])
     const artistName = ref('')
+    const artistId = ref(-1)
     const password = ref('')
     const errorMessage = ref('')
 
@@ -49,12 +55,20 @@
     async function userSignUp(){
         const newUser = { 
             username: username.value,
-            artist_name: artistName.value,
+            artist_id: artistId.value,
             password: password.value,
         }
         const result = await registerUser(newUser)
         console.log("User added successfully", result)
     }
+
+    const availableArtists = computed(() =>
+        artists.value.filter(artist => artist.user_id === null)
+    )
+
+    onMounted(async () =>{
+        artists.value = await fetchArtists()
+    })
 
 
 </script>
