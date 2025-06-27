@@ -37,6 +37,7 @@ function handleCreateUser(){
     height: 700px;
 }
 .center{
+    margin-top: 7rem;
     align-items: center;
     justify-content: center;
 }

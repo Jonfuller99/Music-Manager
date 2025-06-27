@@ -1,11 +1,15 @@
 <template>
-  <div class="main-nav" v-if="auth.isLoggedIn">
-    <router-link to="/home" class="nav-main-pos nav-link">Home</router-link>
-    <router-link to="/songs" class="nav-main-pos nav-link">Songs</router-link>
-    <router-link to="/profile" class="profile nav-link ">Profile</router-link>
-  </div>
-  <div class="content-wrapper">
-    <router-view/>
+  <div class="container-v ">
+    <div class="main-nav" v-if="auth.isLoggedIn">
+      <div class="nav-left">
+        <router-link to="/home" class="nav-main-pos nav-link">Home</router-link>
+        <router-link to="/songs" class="nav-main-pos nav-link">Songs</router-link>
+      </div>
+      <router-link to="/profile" class="profile nav-link ">Profile</router-link>
+    </div>
+    <div class="content-wrapper">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -19,11 +23,10 @@ import { useAuthStore } from './stores/auth';
 <style scoped>
 
 .main-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  width: 100%;
   gap: 1.5rem;
   padding: 1rem 2rem;
   background-color: var(--color-background);
@@ -32,11 +35,13 @@ import { useAuthStore } from './stores/auth';
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
 }
+.nav-left {
+  display: flex;
+  gap: 1.5rem; 
+}
 
 .profile{
-  position: fixed;
-  top: 1;
-  right: 0;
+  margin-left: auto;
   text-decoration: none;
   color: var(--color-text);
   font-weight: 500;
@@ -46,8 +51,7 @@ import { useAuthStore } from './stores/auth';
 }
 
 .content-wrapper {
-  margin: 80px 0px;
-  min-width: 100vw;
+  flex: 1;
 }
 
 /* Router Links */

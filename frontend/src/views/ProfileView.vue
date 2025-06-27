@@ -1,5 +1,5 @@
 <template>
-    <div class="container main">
+    <div class="container ">
       <div class="panel large-panel profile" >
         <Account></Account>
       </div>

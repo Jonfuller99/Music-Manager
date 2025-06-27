@@ -1,5 +1,5 @@
 <template>
-    <div class="container main">
+    <div class="container ">
       <div>
         <ViewSongs @song-selected="handleSongSelection"/>
       </div>
