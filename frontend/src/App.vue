@@ -30,6 +30,7 @@ import { useAuthStore } from './stores/auth';
   border-bottom: 1px solid var(--color-border);
   z-index: 100;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
 }
 
 .profile{

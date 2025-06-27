@@ -4,6 +4,10 @@
             Songs You Apeared On:
         </div>
         <div class="song-list-container">
+            <div v-if="paginatedSongs.length === 0">
+                <h2 class="empty-text">You are not on any songs!</h2>
+                <h3 class="empty-text">Go write some lyrics!</h3>
+            </div>
             <div class="song-list">
                 <div v-for="song in paginatedSongs">
                     <span class="song item item__title" @click="showSongInfo(song)">{{ song.title }} </span>    
@@ -12,8 +16,8 @@
         </div>
         <div class="container center">
             <button :disabled="currentPage === 1" @click="previousPage" class="btn-add btn "><</button>
-            <button :disabled="currentPage === totalPages" @click="nextPage" class="btn-add btn">></button>
             <span class="pagination center">Page {{ currentPage }} of {{ totalPages }}</span>
+            <button :disabled="currentPage === totalPages" @click="nextPage" class="btn-add btn">></button>
         </div>
     </div>
 
@@ -38,7 +42,7 @@
     })
 
     const totalPages = computed(() => {
-        return Math.ceil(songs.value.length / songsPerPage);
+        return Math.ceil(songs.value.length / songsPerPage) || 1; //Could be problematic, I think it works fine tho
     });
 
     const nextPage = ()=>{
@@ -63,9 +67,14 @@
 
 <style scoped>
 
+.empty-text{
+    text-align: center;
+    font-style: italic;
+}
+
 .pagination{
     flex: 1;
-    text-align: right;
+    text-align: center;
     margin: 10px;
 
 }
@@ -80,7 +89,7 @@
 
 
 .song-list-container {
-    padding: 30px;
+    padding: 30px; 
     max-height: 60vh;
     width: 100%;
     height: 100%;
@@ -89,6 +98,7 @@
 .song-list {
     column-count: 3;
     margin: 10px;
+    padding-top: 5px;
     column-gap: 3rem;
     overflow-y: auto; /* Vertical scroll when content overflows */
     break-inside: avoid;

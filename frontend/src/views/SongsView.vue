@@ -26,14 +26,12 @@
 </template>
 
 <style>
-  .center-text{
-    text-align: center;
-    justify-content: center;
-    font-size: 50px;
-    font-style: italic;
-  }
-
-
+.center-text{
+  text-align: center;
+  justify-content: center;
+  font-size: 50px;
+  font-style: italic;
+}
 
 
 
@@ -45,6 +43,7 @@
     }
   }
 </style>
+
 <script setup>
   import { ref, onMounted } from 'vue'
   import { fetchSongs } from '@/api.js'

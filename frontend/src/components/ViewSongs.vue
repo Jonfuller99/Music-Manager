@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="panel large-panel">
+    <div class="panel large-panel scroll">
       <div v-if="authStore.isAdmin" class="container">
         <div class="item panel temp fancy-panel controls" @click="deleteSong">-</div>
         <div class="item panel temp fancy-panel controls" @click="toggleAddTracks">+</div>
@@ -76,7 +76,29 @@
 
 
 
-<style>
+<style scoped>
+.scroll{
+  overflow-y: scroll;
+}
+
+.panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.panel::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.panel::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .controls{
   text-align: center;
   font-weight: 1000;
