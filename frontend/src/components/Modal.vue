@@ -29,7 +29,6 @@ import AddSongs from './AddSongs.vue';
         width: 400px;
         padding: 20px;
         margin: 100px auto;
-        background: rgb(0, 0, 0);
         border-radius: 10px;
         display: flex;
         align-items: center;

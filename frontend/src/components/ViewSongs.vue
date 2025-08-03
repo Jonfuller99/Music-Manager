@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="panel large-panel">
-      <div class="container">
+    <div class="panel large-panel scroll">
+      <div v-if="authStore.isAdmin" class="container">
         <div class="item panel temp fancy-panel controls" @click="deleteSong">-</div>
         <div class="item panel temp fancy-panel controls" @click="toggleAddTracks">+</div>
       </div>
@@ -22,17 +22,22 @@
 
 
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, useAttrs } from 'vue'
   import { fetchSongs, removeSong} from '@/api.js'
   import Modal from './Modal.vue'
   import AddSongs from './AddSongs.vue'
+  import { useAuthStore } from '@/stores/auth'
+
+
 
   const emit = defineEmits(['song-selected'])
+  const authStore = useAuthStore()
 
   const songs = ref([])
   const songSelect = ref(null)
   const displayInfo = ref(false)
   const showTracksModal = ref(false)
+  const token = authStore.token
 
   function showSongInfo(song){
     emit('song-selected', song)
@@ -49,6 +54,9 @@
 
   function toggleAddTracks(){
     showTracksModal.value = !showTracksModal.value;
+    if (showTracksModal.value === False){
+      refreshSongs()
+    }
   }
 
   async function refreshSongs(){
@@ -56,7 +64,7 @@
   }
 
   async function deleteSong(){
-    await removeSong(songSelect.value.id)    
+    await removeSong(songSelect.value.id, token)    
     refreshSongs()
     showSongInfo(null)
   }
@@ -68,10 +76,33 @@
 
 
 
-<style>
+<style scoped>
+.scroll{
+  overflow-y: scroll;
+}
+
+.panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.panel::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.panel::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .controls{
   text-align: center;
   font-weight: 1000;
+  user-select: none;
 }
 
 </style>

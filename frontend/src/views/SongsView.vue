@@ -1,14 +1,14 @@
 <template>
-    <div class="container main">
+    <div class="container ">
       <div>
         <ViewSongs @song-selected="handleSongSelection"/>
       </div>
       <div class="container panel temp">
-        <div v-if="!selectedSong" class="container-h center-text temp">
+        <div v-if="!selectedSong" class="container-v center-text temp">
           Select a song to play
         </div>
         <SongInfo v-if="selectedSong" :song="selectedSong"/>
-        <div v-if="selectedSong" class="container-h temp">
+        <div v-if="selectedSong" class="container-v temp">
           <div class="panel fancy-panel">
             <PlayerView :key="songPath" :audioSrc="songPath"/>
  
@@ -26,14 +26,12 @@
 </template>
 
 <style>
-  .center-text{
-    text-align: center;
-    justify-content: center;
-    font-size: 50px;
-    font-style: italic;
-  }
-
-
+.center-text{
+  text-align: center;
+  justify-content: center;
+  font-size: 50px;
+  font-style: italic;
+}
 
 
 
@@ -45,6 +43,7 @@
     }
   }
 </style>
+
 <script setup>
   import { ref, onMounted } from 'vue'
   import { fetchSongs } from '@/api.js'

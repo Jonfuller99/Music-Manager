@@ -1,22 +1,26 @@
 <template>
-    <div class="container main">
-      <div class="panel large-panel" >
-        Profile
+    <div class="container ">
+      <div class="panel large-panel profile" >
+        <Account></Account>
       </div>
       <div class="temp panel">
-        wide varaity of settings and options!
+        <div class="btn" v-on:click="authStore.logout">Logout</div>
       </div>
     </div>
 
 </template>
 
 <script setup>
-    import ViewSongs from '@/components/ViewSongs.vue'
-    import SongInfo from '@/components/SongInfo.vue'
-    import PlayerView from '@/components/PlayerView.vue'        
+  import Account from '@/components/Account.vue';      
+  import { useAuthStore } from '@/stores/auth';
+
+  const authStore = useAuthStore()
+
 
 </script>
 
-<style>
-
+<style scoped>
+  .profile{
+    width: 400px;
+}
 </style>
