@@ -99,6 +99,12 @@
           this.bpm = '';
           this.genre = '';
           this.fileName = '';
+          this.file = null;
+          // Reset the file input
+          const fileInput = document.getElementById('file');
+          if (fileInput) {
+            fileInput.value = '';
+          }
         
         } catch (error){
           console.error("Failed to add song:", error)
