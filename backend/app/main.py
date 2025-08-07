@@ -28,7 +28,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    SQLModel.metadata.drop_all(engine)
+    # Only drop tables in development mode
+    if os.getenv("ENVIRONMENT") == "development":
+        SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     yield
     print("Shutting down...")
@@ -54,11 +56,6 @@ def get_password_hash(password: str):
 def get_user(session: SessionDep, username: str):
     statement = select(User).where(User.username == username)
     user = session.exec(statement).first()
-    return user
-    
-def decode_token(token: str, session: SessionDep):
-    print(f"Decoding token: {token}")
-    user = get_user(session, token)
     return user
 
 def authenticate_user(session: SessionDep, username: str, password: str):
@@ -164,7 +161,17 @@ async def register_user(user_data: CreateUser, session: SessionDep):
         raise HTTPException(status_code=400, detail="User already exists")
     hashed_password = get_password_hash(user_data.password)
 
-    artist = session.get(Artist,  user_data.artist_id)
+    # Validate artist_id if provided
+    artist = None
+    if user_data.artist_id:
+        artist = session.get(Artist, user_data.artist_id)
+        if not artist:
+            raise HTTPException(status_code=400, detail=f"Artist with ID {user_data.artist_id} not found")
+        
+        # Check if artist is already associated with another user
+        if artist.user_id is not None:
+            raise HTTPException(status_code=400, detail="Artist is already associated with another user")
+
     user = User(
         username=user_data.username,
         hashed_password=hashed_password
@@ -220,11 +227,39 @@ async def create_song(song: Song, session: SessionDep, admin_user: Annotated[Use
 
 @app.post("/upload-file/")
 async def upload_file(admin_user: Annotated[User, Depends(require_admin)], uploaded_file: UploadFile = File()):
-    file_location = f"uploads/{uploaded_file.filename}"
-    with open(file_location, "wb+") as file_object:
-        file_object.write(uploaded_file.file.read())   
+    try:
+        # Validate file
+        if not uploaded_file.filename:
+            raise HTTPException(status_code=400, detail="No file provided")
+        
+        # Sanitize filename to prevent path traversal
+        import os.path
+        safe_filename = os.path.basename(uploaded_file.filename)
+        if not safe_filename or safe_filename != uploaded_file.filename:
+            raise HTTPException(status_code=400, detail="Invalid filename")
+        
+        # Check file size (limit to 50MB)
+        max_size = 50 * 1024 * 1024  # 50MB
+        file_content = await uploaded_file.read()
+        if len(file_content) > max_size:
+            raise HTTPException(status_code=400, detail="File too large (max 50MB)")
+        
+        # Ensure uploads directory exists
+        upload_dir = "uploads"
+        os.makedirs(upload_dir, exist_ok=True)
+        
+        file_location = f"{upload_dir}/{safe_filename}"
+        
+        # Write file with error handling
+        with open(file_location, "wb") as file_object:
+            file_object.write(file_content)
+        
+        return {"info": f"file '{safe_filename}' saved at '{file_location}'"}
     
-    return {"info": f"file '{uploaded_file.filename}' saved at '{file_location}'"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to upload file: {str(e)}")
 
 
 @app.get("/link-to-mp3/")
