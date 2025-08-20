@@ -25,6 +25,10 @@
         <span class="detail-label">Uploaded at</span>
         <span class="detail-value">{{ formatDate(song.uploaded_at)}}</span>
       </div>
+      <div class="detail-row">
+        <span class="detail-label">Song ID</span>
+        <span class="detail-value">{{ song.song_id}}</span>
+      </div>
     </div>
   </div>
 </template>

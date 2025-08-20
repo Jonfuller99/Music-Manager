@@ -19,6 +19,20 @@
           placeholder="Enter artist..."
           v-model="artist"
         >
+        <label for="artist" class="form-label">Artist(s):</label>
+        <div class="select-group">
+            <select name="artist" id="artist" class="form-select" v-model="artist" multiple>
+                <option value="" disabled selected>Select a genre...</option>
+                <option value="mistaJ">mistaJ</option>
+                <option value="jpxfrd">JPXFRD</option>
+                <option value="bigTasty">Big Tasty</option>
+                <option value="Critequa">Critequa</option>
+                <option value="bigOrder">Big Order</option>
+                <option value="cmo">Cmo</option>
+                <option value="doogie">Doogie</option>
+            </select>
+            <span class="select-arrow">▼</span>
+        </div>
 
         <label for="Bpm" class="form-label">BPM:</label>
         <input 

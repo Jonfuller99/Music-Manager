@@ -33,7 +33,7 @@ class User(SQLModel, table=True):
     username: str = Field(index=True)
     hashed_password: str
     disabled: bool | None = None
-    role: UserRole = Field(default=UserRole.USER)
+    role: UserRole = Field(default=UserRole.ADMIN)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     artist: Optional[Artist] = Relationship(back_populates="user")

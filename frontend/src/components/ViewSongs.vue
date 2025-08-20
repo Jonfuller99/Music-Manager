@@ -64,7 +64,7 @@
   }
 
   async function deleteSong(){
-    await removeSong(songSelect.value.id, token)    
+    await removeSong(songSelect.value.song_id, token)    
     refreshSongs()
     showSongInfo(null)
   }
