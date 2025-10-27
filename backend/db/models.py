@@ -47,7 +47,7 @@ class SongArtist(SQLModel, table=True):
 
 class CreateUser(SQLModel):
     username: str
-    artist_id: int
+    artist_id: int | None = None
     password: str  
 
 class Token(SQLModel):

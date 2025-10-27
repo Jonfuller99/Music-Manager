@@ -176,31 +176,31 @@
     transform: translateY(-2px);
   }
 
-  /* Title Style */
-  &__title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--color-heading);
-    margin: 0;
+}
 
-  }
+/* Title Style */
+.item__title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-heading);
+  margin: 0;
+}
 
-  /* Subtitle/Metadata */
-  &__meta {
-    font-size: 0.9rem;
-    color: var(--color-text-soft);
-    display: flex;
-    gap: 1rem;
-  }
+/* Subtitle/Metadata */
+.item__meta {
+  font-size: 0.9rem;
+  color: var(--color-text-soft);
+  display: flex;
+  gap: 1rem;
+}
 
-  /* Optional Action Bar */
-  &__actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px dashed var(--color-border);
-  }
+/* Optional Action Bar */
+.item__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--color-border);
 }
 
 .backdrop{
