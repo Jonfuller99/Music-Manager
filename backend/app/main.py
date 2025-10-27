@@ -58,8 +58,15 @@ def get_user(session: SessionDep, username: str):
     
 def decode_token(token: str, session: SessionDep):
     print(f"Decoding token: {token}")
-    user = get_user(session, token)
-    return user
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if username is None:
+            return None
+        user = get_user(session, username)
+        return user
+    except InvalidTokenError:
+        return None
 
 def authenticate_user(session: SessionDep, username: str, password: str):
     user = get_user(session, username)

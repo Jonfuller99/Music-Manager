@@ -54,7 +54,7 @@ export async function uploadFile(uploadedFile, token){
         headers: authHeaders(token),
         body: formData
     });
-    if (!resp.ok) throw new Error('Failed to upload file', formData)
+    if (!resp.ok) throw new Error('Failed to upload file')
     return await resp.json()
 }
 
